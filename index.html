@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Browser</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00f2ff">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="stylesheet" href="stylec.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="robot-status-indicator"></div>
+
+    <div id="browser-header">
+        <div id="tab-strip">
+            <div id="tabs-container"></div>
+            <button id="new-tab-btn" title="Yeni Sekme"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <div id="nav-bar">
+            <div class="nav-controls">
+                <button id="home-btn" title="Ana Sayfa">
+                    <img src="3ec313e2-d25d-4a6f-a9da-bb370a788dd2-Photoroom (1).png" alt="Home" style="height: 24px;">
+                </button>
+                <button id="back-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                <button id="forward-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                <button id="reload-btn"><i class="fa-solid fa-rotate-right"></i></button>
+            </div>
+
+            <div class="address-container">
+                <i class="fa-solid fa-shield-halved lock-icon"></i>
+                <input type="text" id="url-input" placeholder="Google'da ara veya URL gir...">
+            </div>
+            <button id="go-btn">Git</button>
+        </div>
+    </div>
+
+    <div id="browser-body"></div>
+
+    <div id="nova-wrapper">
+        <div id="nova-chat-window">
+            <div class="nova-header">
+                <span><i class="fa-solid fa-robot"></i> Nova Explore</span>
+                <button id="close-nova">✕</button>
+            </div>
+            <div id="nova-messages">
+                <div class="msg nova-msg">Merhaba! Ben Nova. Emir verebilirsin!</div>
+            </div>
+            <div class="nova-input-area">
+                <input type="text" id="nova-input" placeholder="Emir ver...">
+                <button id="mic-btn" title="Sesli Komut"><i class="fa-solid fa-microphone"></i></button>
+                <button id="send-nova"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button id="nova-fab" title="Nova ile Konuş">
+            <img src="3ec313e2-d25d-4a6f-a9da-bb370a788dd2-Photoroom (1).png" alt="Nova" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+        </button>
+    </div>
+
+    <template id="home-template">
+        <div class="home-screen-content">
+            <img src="3ec313e2-d25d-4a6f-a9da-bb370a788dd2-Photoroom (1).png" class="home-logo" alt="Nova Logo" style="width:100px; height:100px; border-radius:20px; box-shadow:0 0 20px #00f2ff;">
+            <h1 class="nova-title">NOVA EXPLORE</h1>
+            <div class="home-search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="home-input" placeholder="İnternette bir şeyler ara...">
+            </div>
+            <div class="shortcuts">
+                <div class="shortcut-item" onclick="navigateTo('https://youtube.com')"><i class="fa-brands fa-youtube" style="color:red;"></i></div>
+                <div class="shortcut-item" onclick="navigateTo('https://twitter.com')"><i class="fa-brands fa-twitter" style="color:#1da1f2;"></i></div>
+                <div class="shortcut-item" onclick="navigateTo('https://instagram.com')"><i class="fa-brands fa-instagram" style="color:#e1306c;"></i></div>
+                <div class="shortcut-item" onclick="navigateTo('https://google.com')"><i class="fa-brands fa-google" style="color:#4285F4;"></i></div>
+            </div>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>

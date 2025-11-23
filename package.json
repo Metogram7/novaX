@@ -1,0 +1,32 @@
+{
+  "name": "nova-browser",
+  "version": "1.0.0",
+  "description": "Nova Atlas - Yapay Zeka Destekli Tarayıcı, her sitede ajan modu ile tam kontrol",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging"
+  },
+  "author": "Metehan",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^33.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@jitsi/robotjs": "^0.6.18",
+    "@electron/remote": "^2.1.2",
+    "axios": "^1.6.5",
+    "node-fetch": "^3.3.2",
+    "puppeteer-core": "^21.0.0"
+  },
+  "keywords": [
+    "electron",
+    "browser",
+    "nova",
+    "ai",
+    "automation",
+    "agent"
+  ]
+}
