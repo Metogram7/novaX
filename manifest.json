@@ -1,11 +1,10 @@
 {
   "name": "Nova Explore",
-  "short_name": "Nova",
-  "start_url": "/index.html",
+  "short_name": "NovaX",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#1a1a1a",
+  "background_color": "#ffffff",
   "theme_color": "#00f2ff",
-  "description": "Yapay zeka destekli web asistanınız",
   "icons": [
     {
       "src": "Gemini_Generated_Image_n3cqe4n3cqe4n3cq.png",

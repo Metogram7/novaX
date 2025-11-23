@@ -81,6 +81,13 @@
             </div>
         </div>
     </template>
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Kaydedildi'))
+        .catch(err => console.log('SW Hatası:', err));
+    }
+    </script>
 
     <script src="script.js"></script>
 </body>

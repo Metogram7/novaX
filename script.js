@@ -730,3 +730,119 @@ if ('serviceWorker' in navigator) {
         });
     });
 }
+
+// ... (script.js'nin üst kısımları aynı kalsın) ...
+
+// --- EKSİK OLAN NAVİGASYON FONKSİYONLARI ---
+
+function handleMainSearch() {
+    const query = urlInput.value.trim();
+    if (!query) return;
+
+    let targetUrl = query;
+    
+    // URL mi yoksa Arama mı?
+    if (!targetUrl.includes('.') || targetUrl.includes(' ')) {
+        targetUrl = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+    } else {
+        if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+            targetUrl = 'https://' + targetUrl;
+        }
+    }
+    
+    navigateTo(targetUrl);
+}
+
+function navigateTo(url) {
+    if (url === 'home') {
+        renderHome(activeTabId);
+        return;
+    }
+
+    tabs[activeTabId].url = url;
+    const contentDiv = document.getElementById(`content-${activeTabId}`);
+    contentDiv.innerHTML = ''; // Temizle
+
+    // Eğer Electron (Masaüstü Uygulaması) modundaysak
+    if (ipcRenderer) {
+        const webview = document.createElement('webview');
+        webview.src = url;
+        webview.style.width = '100%';
+        webview.style.height = '100%';
+        // Google Login vb. için allowpopups gerekir
+        webview.setAttribute('allowpopups', 'on'); 
+        
+        webview.addEventListener('did-start-loading', () => {
+            if(document.getElementById(`btn-${activeTabId}`))
+                document.getElementById(`btn-${activeTabId}`).querySelector('.title').innerText = "Yükleniyor...";
+        });
+        
+        webview.addEventListener('did-stop-loading', () => {
+            if(document.getElementById(`btn-${activeTabId}`))
+                document.getElementById(`btn-${activeTabId}`).querySelector('.title').innerText = webview.getTitle();
+            urlInput.value = webview.getURL();
+        });
+
+        contentDiv.appendChild(webview);
+    } 
+    // Eğer PWA / Web Tarayıcı modundaysak
+    else {
+        // GÜVENLİK KONTROLÜ: Google, Youtube vb. iframe içinde açılmaz.
+        const blockedDomains = ['google.com', 'youtube.com', 'facebook.com', 'twitter.com', 'instagram.com'];
+        const isBlocked = blockedDomains.some(domain => url.includes(domain));
+
+        if (isBlocked) {
+            contentDiv.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#333; text-align:center;">
+                    <i class="fa-solid fa-shield-cat" style="font-size:64px; color:#ff5f57; margin-bottom:20px;"></i>
+                    <h2>Bu site PWA modunda açılamaz</h2>
+                    <p>Google ve sosyal medya siteleri güvenlik nedeniyle (X-Frame-Options) kendilerini çerçeve içine aldırmazlar.</p>
+                    <p>Bu siteyi harici bir sekmede açmak için aşağıdaki butonu kullanın.</p>
+                    <a href="${url}" target="_blank" style="background:#1a73e8; color:white; padding:10px 20px; text-decoration:none; border-radius:20px; margin-top:10px;">
+                        Siteyi Yeni Sekmede Aç <i class="fa-solid fa-external-link-alt"></i>
+                    </a>
+                </div>
+            `;
+            urlInput.value = url;
+        } else {
+            // Wikipedia veya kişisel bloglar gibi izin veren siteler için IFRAME kullan
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            
+            // Iframe kısıtlamalarını gevşet (Sandbox)
+            iframe.sandbox = "allow-forms allow-scripts allow-same-origin allow-popups";
+
+            contentDiv.appendChild(iframe);
+            urlInput.value = url;
+        }
+    }
+}
+
+function renderHome(tabId) {
+    tabs[tabId].url = 'home';
+    tabs[tabId].title = 'Yeni Sekme';
+    
+    const btn = document.getElementById(`btn-${tabId}`);
+    if(btn) btn.querySelector('.title').innerText = 'Yeni Sekme';
+
+    const contentDiv = document.getElementById(`content-${tabId}`);
+    contentDiv.innerHTML = '';
+
+    const template = document.getElementById('home-template');
+    const clone = template.content.cloneNode(true);
+    
+    // Home ekranındaki inputa enter basınca arama yapması için
+    const homeInput = clone.querySelector('.home-input');
+    homeInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') {
+            urlInput.value = homeInput.value; // Ana inputu güncelle
+            handleMainSearch();
+        }
+    });
+
+    contentDiv.appendChild(clone);
+    urlInput.value = '';
+}
